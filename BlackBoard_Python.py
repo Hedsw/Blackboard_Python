@@ -2,9 +2,10 @@
 '''
 In Blackboard Pattern, Several specialized sub-systems which is Knowledge Sources
 Store the Knowledge data to build a possibly partial solution.
-In this way, the sub-systems wrok together to provide solution
+In this way, the sub-systems work together to provide solution
 
-The Solution is the sume of parts 
+Randomly add numbers on contributions and progress. After that, check progress is smaller than 5
+If the progress is smaller than 5, return contributions
 
 We referenced https://en.wikipedia.org/wiki/Blackboard_system
 '''
@@ -17,9 +18,8 @@ class BlackBoardPattern(object):
     def __init__(self):
         self.experts = []
         self.common_state = {
-            'problems': 0,
             'contributions': [],
-            'progress': 0   # percentage, if 100 -> task is finished
+            'progress': 0   # Randomly add numbers on Progress
         }
 
     def add_expert(self, expert):
@@ -31,12 +31,12 @@ class Controller(object):
         self.blackboard = blackboard
 
     def loop_run(self):
-        while self.blackboard.common_state['progress'] < 100:
+        while self.blackboard.common_state['progress'] < 5:
             for expert in self.blackboard.experts:
                 if expert.is_eager_to_contribute:
                     expert.contribute()
+        
         return self.blackboard.common_state['contributions']
-
 
 class AbstractExpert(object):
     __metaclass__ = abc.ABCMeta
@@ -53,48 +53,36 @@ class AbstractExpert(object):
         raise NotImplementedError('Error_ Implementation')
 
 
-class PersonA(AbstractExpert):
+class Cat(AbstractExpert):
     @property
     def is_eager_to_contribute(self):
         return True
 
     def contribute(self):
-        self.blackboard.common_state['problems'] += random.randint(1, 10)
         self.blackboard.common_state['contributions'] += [self.__class__.__name__]
-        self.blackboard.common_state['progress'] += random.randint(1, 2)
+        self.blackboard.common_state['progress'] += random.randint(1, 10)
 
 
-class PersonB(AbstractExpert):
+class Dog(AbstractExpert):
     @property
     def is_eager_to_contribute(self):
         return random.randint(0, 1)
 
     def contribute(self):
-        self.blackboard.common_state['problems'] += random.randint(10, 20)
         self.blackboard.common_state['contributions'] += [self.__class__.__name__]
         self.blackboard.common_state['progress'] += random.randint(10, 30)
-
-class PersonC(AbstractExpert):
-    @property
-    def is_eager_to_contribute(self):
-        return True if self.blackboard.common_state['problems'] > 100 else False
-
-    def contribute(self):
-        self.blackboard.common_state['problems'] += random.randint(1, 2)
-        self.blackboard.common_state['contributions'] += [self.__class__.__name__]
-        self.blackboard.common_state['progress'] += random.randint(10, 100)
 
 
 if __name__ == '__main__':
     blackboard = BlackBoardPattern()
 
-    blackboard.add_expert(PersonB(blackboard))
-    blackboard.add_expert(PersonA(blackboard))
+    blackboard.add_expert(Cat(blackboard))
+    blackboard.add_expert(Dog(blackboard))
 
 
     c = Controller(blackboard)
     contributions = c.loop_run()
 
     from pprint import pprint
-    pprint(contributions)
+    pprint(blackboard.common_state['contributions'])
     
