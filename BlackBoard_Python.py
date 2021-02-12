@@ -74,7 +74,6 @@ class PersonB(AbstractExpert):
         self.blackboard.common_state['contributions'] += [self.__class__.__name__]
         self.blackboard.common_state['progress'] += random.randint(10, 30)
 
-
 class PersonC(AbstractExpert):
     @property
     def is_eager_to_contribute(self):
@@ -89,12 +88,13 @@ class PersonC(AbstractExpert):
 if __name__ == '__main__':
     blackboard = BlackBoardPattern()
 
-    blackboard.add_expert(PersonA(blackboard))
     blackboard.add_expert(PersonB(blackboard))
-    blackboard.add_expert(PersonC(blackboard))
+    blackboard.add_expert(PersonA(blackboard))
+
 
     c = Controller(blackboard)
     contributions = c.loop_run()
 
     from pprint import pprint
     pprint(contributions)
+    
