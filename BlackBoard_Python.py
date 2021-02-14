@@ -1,12 +1,8 @@
 
 '''
-In Blackboard Pattern, Several specialized sub-systems which is Knowledge Sources
-Store the Knowledge data to build a possibly partial solution.
-In this way, the sub-systems work together to provide solution
-
+BlackBoard <--> Controller <---> Knowledge Source (Cat, Dog)
 Randomly add numbers on contributions and progress. After that, check progress is smaller than 5
 If the progress is smaller than 5, return contributions
-
 We referenced https://en.wikipedia.org/wiki/Blackboard_system
 '''
 
@@ -31,31 +27,31 @@ class Controller(object):
         self.blackboard = blackboard
 
     def loop_run(self):
-        while self.blackboard.common_state['progress'] < 5:
+        while self.blackboard.common_state['progress'] < 100:
             for expert in self.blackboard.experts:
-                if expert.is_eager_to_contribute:
+                if expert.randomly_contri:
                     expert.contribute()
         
         return self.blackboard.common_state['contributions']
 
-class AbstractExpert(object):
+class Erroerchecker(object):
     __metaclass__ = abc.ABCMeta
 
     def __init__(self, blackboard):
         self.blackboard = blackboard
 
     @abc.abstractproperty
-    def is_eager_to_contribute(self):
-        raise NotImplementedError('Error_ Implementation')
+    def randomly_contri(self):
+        raise ErroerShooting('Error_ Implementation')
 
     @abc.abstractmethod
     def contribute(self):
-        raise NotImplementedError('Error_ Implementation')
+        raise ErroerShooting('Error_ Implementation')
 
 
-class Cat(AbstractExpert):
+class Cat(Erroerchecker):
     @property
-    def is_eager_to_contribute(self):
+    def randomly_contri(self):
         return True
 
     def contribute(self):
@@ -63,9 +59,9 @@ class Cat(AbstractExpert):
         self.blackboard.common_state['progress'] += random.randint(1, 10)
 
 
-class Dog(AbstractExpert):
+class Dog(Erroerchecker):
     @property
-    def is_eager_to_contribute(self):
+    def randomly_contri(self):
         return random.randint(0, 1)
 
     def contribute(self):
@@ -79,10 +75,10 @@ if __name__ == '__main__':
     blackboard.add_expert(Cat(blackboard))
     blackboard.add_expert(Dog(blackboard))
 
-
     c = Controller(blackboard)
     contributions = c.loop_run()
 
     from pprint import pprint
     pprint(blackboard.common_state['contributions'])
     
+
