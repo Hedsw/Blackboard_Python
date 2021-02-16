@@ -1,8 +1,8 @@
 
 '''
 BlackBoard <--> Controller <---> Knowledge Source (Cat, Dog)
-Randomly add numbers on contributions and progress. After that, check progress is smaller than 5
-If the progress is smaller than 5, return contributions
+Randomly add numbers on contributions and feeds. After that, check feeds is smaller than 5
+If the feeds is smaller than 5, return contributions
 We referenced https://en.wikipedia.org/wiki/Blackboard_system
 '''
 
@@ -12,14 +12,14 @@ import random
 class BlackBoardPattern(object):
 
     def __init__(self):
-        self.experts = []
+        self.animals = []
         self.common_state = {
             'contributions': [],
-            'progress': 0   # Randomly add numbers on Progress
+            'feeds': 0   # Randomly add numbers on feeds
         }
 
     def add_expert(self, expert):
-        self.experts.append(expert)
+        self.animals.append(expert)
 
 class Controller(object):
 
@@ -27,8 +27,8 @@ class Controller(object):
         self.blackboard = blackboard
 
     def loop_run(self):
-        while self.blackboard.common_state['progress'] < 100:
-            for expert in self.blackboard.experts:
+        while self.blackboard.common_state['feeds'] < 100:
+            for expert in self.blackboard.animals:
                 if expert.randomly_contri:
                     expert.contribute()
         
@@ -52,11 +52,11 @@ class Erroerchecker(object):
 class Cat(Erroerchecker):
     @property
     def randomly_contri(self):
-        return True
+        return random.randint(0, 1)
 
     def contribute(self):
         self.blackboard.common_state['contributions'] += [self.__class__.__name__]
-        self.blackboard.common_state['progress'] += random.randint(1, 10)
+        self.blackboard.common_state['feeds'] += random.randint(1, 11)
 
 
 class Dog(Erroerchecker):
@@ -66,7 +66,7 @@ class Dog(Erroerchecker):
 
     def contribute(self):
         self.blackboard.common_state['contributions'] += [self.__class__.__name__]
-        self.blackboard.common_state['progress'] += random.randint(10, 30)
+        self.blackboard.common_state['feeds'] += random.randint(1, 11)
 
 
 if __name__ == '__main__':
@@ -76,7 +76,7 @@ if __name__ == '__main__':
     blackboard.add_expert(Dog(blackboard))
 
     c = Controller(blackboard)
-    contributions = c.loop_run()
+    returnvalue = c.loop_run()
 
     from pprint import pprint
     pprint(blackboard.common_state['contributions'])

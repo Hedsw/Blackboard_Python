@@ -1,7 +1,7 @@
 # CIS569_Software System Design
 
 
-Blackboard 
+Blackboard (Davina Sardinha, Yunhyeok Lee)
 
 + Requirements:
  - Each team should prepare a 15-minute presentation that covers at least of the     following
