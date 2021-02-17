@@ -20,6 +20,17 @@ struct all_lines {
 static vector<all_lines> vectorLine;
 static vector<keywords> vectorKeyword;
 
-bool sortCompare(const keywords &a, const keywords &b);
+bool circularshift(const keywords &a, const keywords &b);
+class KnowledgeSource{ 
+    public: 
+    void inputfunction(string inputKeyword);
+};
+
+class Blackboard{
+    public:
+    void aftercircularshifting();
+
+};
+
 
 #endif

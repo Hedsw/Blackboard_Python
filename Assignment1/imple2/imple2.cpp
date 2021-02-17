@@ -1,22 +1,14 @@
 
 /* 
-First Implementation 
 The first implementation
 • reads the all lines from the keyboard,
 • stores all the lines in the core with each word stored as a sequence of characters,
 • circularly shifts all the lines and stores them,
 • alphabetizes the circularly shifted lines, and then
-• displays the results on the screen.
-*/
+• displays the results on the screen. */
+#include "imple2.h"
 
-#include "assignment1.h"
-
-int main()
-{
-    cout << " Please type lines again, If you are done, type CTRL + D " << endl;
-    string inputKeyword;
-    //compare sorter;
-
+void KnowledgeSource::inputfunction(string inputKeyword) { 
     while (cin >> inputKeyword)
     {
         line.vs.push_back(inputKeyword); // Add all keyword into L struct line by line
@@ -28,7 +20,6 @@ int main()
             line.vs.clear();  // When Enterkey is twiced ,Clear all of information in L.vs
         }
     }
-    
     for (int i = 0; i < vectorLine.size(); i++) // Without line change, count how many contents in vectorLine 
     {
         for (int j = 0; j < vectorLine[i].vs.size(); j++) // How many keywords in the line 
@@ -38,13 +29,9 @@ int main()
             vectorKeyword.push_back(mywords); // add the keyword into ..
         }
     }
+}
 
-    // cout << vw.size() << " <-- size check " << endl;
-    sort(vectorKeyword.begin(), vectorKeyword.end(), sortCompare);
-    
-    cout << '\n' << "Sorted all_liness below " << '\n' << endl; 
-
-  
+void Blackboard::aftercircularshifting() {
     for (int i = 0; i < vectorKeyword.size(); i++) // How many lines ..
     {
         int line_pos = vectorKeyword[i].line_pos;
@@ -67,7 +54,6 @@ int main()
                 cout << " " ;
             }
         }
-
         for (int j = 0; j < keyword_pos; j++)
         {
             count++;
@@ -81,17 +67,14 @@ int main()
             {
                 cout << " ";
             }
-
         }
     }
-    return 0;
 }
 
 // This function is to use at third parameter at sort in main function 
-// sort(first, second , sortcompare function) 
+// sort(first, second , circularshift function) 
 // We are going to sort using this parameter
-
-bool sortCompare(const keywords &a, const keywords &b)  {
+bool circularshift(const keywords &a, const keywords &b)  {
     all_lines First, Second;
     int length = 0;
 
@@ -134,4 +117,22 @@ bool sortCompare(const keywords &a, const keywords &b)  {
     }
 
     return First.vs.size() < Second.vs.size();
+}
+
+int main()
+{
+    cout << " Please type lines again, If you are done, type CTRL + D " << endl;
+    string inputKeyword;
+    //compare sorter;
+    KnowledgeSource KS;
+    Blackboard BB;
+
+    KS.inputfunction(inputKeyword);
+
+    // cout << vw.size() << " <-- size check " << endl;
+    sort(vectorKeyword.begin(), vectorKeyword.end(), circularshift);
+    cout << '\n' << "Sorted all_liness below " << '\n' << endl; 
+    BB.aftercircularshifting();
+
+    return 0;
 }
