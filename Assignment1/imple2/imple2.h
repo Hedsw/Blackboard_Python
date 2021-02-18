@@ -21,27 +21,21 @@ struct all_lines {
 } line;
 
 vector<string> readwordlist;
-
 static vector<all_lines> vectorLine;
 static vector<keywords> vectorKeyword;
 
 bool circularshift(const keywords &a, const keywords &b);
-class KnowledgeSource{ 
+class KnowledgeSource { 
     public: 
         void inputfunction(string inputKeyword);
+        void readWords();
+
 };
 
-class Blackboard{
+class Blackboard {
     public:
         void aftercircularshifting();
 
 };
-
-class fileReader {
-    public:
-        void readWords();
-      //  void getKeyTexts();
-};
-
 
 #endif

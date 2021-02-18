@@ -10,7 +10,7 @@ preposition (such as “in”, “on”, etc.), the line is not considered to be
 #include "imple2.h"
 // list<string> readwordlist;
 
-void fileReader::readWords() {
+void KnowledgeSource::readWords() {
     ifstream in ("keywordline.txt");
     string readword;
     if (!in) {
@@ -18,9 +18,7 @@ void fileReader::readWords() {
     return;
     }
     while(getline(in,readword)) {
-        // cout << readword << " Good? " << endl;
-        //readwordlist.push_back(readword); // 코드에서 가져온거
-        line.vs.push_back(readword); //아래에 코드 넣는거..
+        line.vs.push_back(readword); 
         //if(getchar() == '\n') {
             vectorLine.push_back(line);
             //line.vs.clear();
@@ -35,21 +33,18 @@ void fileReader::readWords() {
 
 
 void KnowledgeSource::inputfunction(string inputKeyword) { 
-    while (cin >> inputKeyword)
-    {
+    while (cin >> inputKeyword) {
         line.vs.push_back(inputKeyword); // Add all keyword into L struct line by line
-        if (getchar() == '\n')
-        {
+        if (getchar() == '\n') {
             vectorLine.push_back(line); // In Empty space, input all lines into vectorLine
             //cout << "Next lines will be sorted separately with previous contents " << endl;
 
             line.vs.clear();  // When Enterkey is twiced ,Clear all of information in L.vs
         }
     }
-    for (int i = 0; i < vectorLine.size(); i++) // Without line change, count how many contents in vectorLine 
-    {
-        for (int j = 0; j < vectorLine[i].vs.size(); j++) // How many keywords in the line 
-        {
+    for (int i = 0; i < vectorLine.size(); i++) { // Without line change, count how many contents in vectorLine 
+        for (int j = 0; j < vectorLine[i].vs.size(); j++) { // How many keywords in the line 
+        
             keywords mywords = {i,j}; // i lines j keywords 
             // cout << mywords.line_pos << " and " << mywords.keyword_pos << " Wow " << endl; 
             vectorKeyword.push_back(mywords); // add the keyword into ..
@@ -60,8 +55,7 @@ void KnowledgeSource::inputfunction(string inputKeyword) {
 void Blackboard::aftercircularshifting() {
     ofstream fout;
     fout.open("result.txt");
-    for (int i = 0; i < vectorKeyword.size(); i++) // How many lines ..
-    {
+    for (int i = 0; i < vectorKeyword.size(); i++) { // How many lines ..
         int line_pos = vectorKeyword[i].line_pos;
         int keyword_pos = vectorKeyword[i].keyword_pos;
         int vs_sz = (int)vectorLine[line_pos].vs.size();
@@ -69,35 +63,29 @@ void Blackboard::aftercircularshifting() {
         
         // cout << vs_sz << " <-- size check " << endl;
         
-        for (int j = keyword_pos; j < vs_sz; j++) // How many keyword in the line 
-        {
+        for (int j = keyword_pos; j < vs_sz; j++) { // How many keyword in the line 
             count++;
             fout << vectorLine[line_pos].vs[j] ;
             cout << vectorLine[line_pos].vs[j] ;
-            if(count == vs_sz) 
-            {   
+            if(count == vs_sz) {   
                 fout << "" << endl;
                 cout << "" << endl;
             }
-            else 
-            {
+            else {
                 fout << " ";
                 cout << " ";
             }
         }
-        for (int j = 0; j < keyword_pos; j++)
-        {
+        for (int j = 0; j < keyword_pos; j++) {
             count++;
             fout << vectorLine[line_pos].vs[j];
             cout << vectorLine[line_pos].vs[j];
 
-            if(count == vs_sz) 
-            {
+            if(count == vs_sz) {
                 fout << "" << endl;
                 cout << "" << endl;
             }
-            else 
-            {   
+            else {   
                 fout << " ";
                 cout << " ";
             }
@@ -160,9 +148,8 @@ int main() {
     //compare sorter;
     KnowledgeSource KS;
     Blackboard BB;
-    fileReader rB;
-
-    rB.readWords();
+    
+    KS.readWords();
     //KS.inputfunction(inputKeyword); // Input 한 줄씩 넣을 때..
 
     sort(vectorKeyword.begin(), vectorKeyword.end(), circularshift);
