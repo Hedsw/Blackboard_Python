@@ -1,12 +1,38 @@
 
-/* 
-The first implementation
-• reads the all lines from the keyboard,
-• stores all the lines in the core with each word stored as a sequence of characters,
-• circularly shifts all the lines and stores them,
-• alphabetizes the circularly shifted lines, and then
-• displays the results on the screen. */
+/* The second implementation
+• reads the lines from a file,
+• stores all the lines in the core with each word as a Word object,
+• considers "interesting" circular shifts only.
+Note: If a leading word of a line is an article (such as “a”, “an”, “the”) and a
+preposition (such as “in”, “on”, etc.), the line is not considered to be “interesting”.
+• alphabetizes the circularly shifted lines by using a different sorting algorithm from the first implementation,
+• outputs to a file. */
 #include "imple2.h"
+// list<string> readwordlist;
+
+void fileReader::readWords() {
+    ifstream in ("keywordline.txt");
+    string readword;
+    if (!in) {
+        cout << " Nothing Happening";
+    return;
+    }
+    while(getline(in,readword)) {
+        // cout << readword << " Good? " << endl;
+        //readwordlist.push_back(readword); // 코드에서 가져온거
+        line.vs.push_back(readword); //아래에 코드 넣는거..
+        //if(getchar() == '\n') {
+            vectorLine.push_back(line);
+            //line.vs.clear();
+    }
+    for (int i = 0; i < vectorLine.size(); i++) {
+        for(int j = 0; j < vectorLine[i].vs.size(); j++) {
+            keywords mywords = {i, j};
+            vectorKeyword.push_back(mywords);
+        }
+    }
+}
+
 
 void KnowledgeSource::inputfunction(string inputKeyword) { 
     while (cin >> inputKeyword)
@@ -32,6 +58,8 @@ void KnowledgeSource::inputfunction(string inputKeyword) {
 }
 
 void Blackboard::aftercircularshifting() {
+    ofstream fout;
+    fout.open("result.txt");
     for (int i = 0; i < vectorKeyword.size(); i++) // How many lines ..
     {
         int line_pos = vectorKeyword[i].line_pos;
@@ -44,31 +72,38 @@ void Blackboard::aftercircularshifting() {
         for (int j = keyword_pos; j < vs_sz; j++) // How many keyword in the line 
         {
             count++;
+            fout << vectorLine[line_pos].vs[j] ;
             cout << vectorLine[line_pos].vs[j] ;
             if(count == vs_sz) 
-            {
+            {   
+                fout << "" << endl;
                 cout << "" << endl;
             }
             else 
             {
-                cout << " " ;
+                fout << " ";
+                cout << " ";
             }
         }
         for (int j = 0; j < keyword_pos; j++)
         {
             count++;
+            fout << vectorLine[line_pos].vs[j];
             cout << vectorLine[line_pos].vs[j];
 
             if(count == vs_sz) 
             {
+                fout << "" << endl;
                 cout << "" << endl;
             }
             else 
-            {
+            {   
+                fout << " ";
                 cout << " ";
             }
         }
     }
+    fout.close();
 }
 
 // This function is to use at third parameter at sort in main function 
@@ -119,19 +154,30 @@ bool circularshift(const keywords &a, const keywords &b)  {
     return First.vs.size() < Second.vs.size();
 }
 
-int main()
-{
+int main() {
     cout << " Please type lines again, If you are done, type CTRL + D " << endl;
     string inputKeyword;
     //compare sorter;
     KnowledgeSource KS;
     Blackboard BB;
+    fileReader rB;
 
-    KS.inputfunction(inputKeyword);
+    rB.readWords();
+    //KS.inputfunction(inputKeyword); // Input 한 줄씩 넣을 때..
 
-    // cout << vw.size() << " <-- size check " << endl;
     sort(vectorKeyword.begin(), vectorKeyword.end(), circularshift);
+    
+    // store Keywords into lists from the files
+    
+    // Print the Keywords
+    /*
+    for(list<string>::iterator keyword = readwordlist.begin(); keyword!=readwordlist.end(); ++keyword)
+        cout << *keyword <<  " ";
+    cout << endl << endl;
+     */
+
     cout << '\n' << "Sorted all_liness below " << '\n' << endl; 
+   
     BB.aftercircularshifting();
 
     return 0;
