@@ -25,6 +25,8 @@ static vector<all_lines> vectorLine;
 static vector<keywords> vectorKeyword;
 
 bool cShiftFilter(const keywords &a, const keywords &b);
+bool alphabetizing(all_lines First, all_lines Second);
+
 class Filters { 
     public: 
         void InputFilter(string inputKeyword);
@@ -32,9 +34,10 @@ class Filters {
 
 };
 
-class AlphabetizerAndOutput {
+class OutputResult
+ {
     public:
-        void after_cshifting();
+        void output();
 
 };
 

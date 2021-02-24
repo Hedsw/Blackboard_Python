@@ -29,7 +29,6 @@ void Filters::readWordsFilter() {
     }
 }
 
-
 void Filters::InputFilter(string inputKeyword) { 
     while (cin >> inputKeyword) {
         line.vs.push_back(inputKeyword); // Add all keyword into L struct line by line
@@ -49,7 +48,7 @@ void Filters::InputFilter(string inputKeyword) {
     }
 }
 
-void AlphabetizerAndOutput::after_cshifting() {
+void OutputResult::output() {
     ofstream fout;
     fout.open("result.txt");
     for (int i = 0; i < vectorKeyword.size(); i++) { // How many lines ..
@@ -57,7 +56,6 @@ void AlphabetizerAndOutput::after_cshifting() {
         int keyword_pos = vectorKeyword[i].keyword_pos;
         int vs_sz = (int)vectorLine[line_pos].vs.size();
         int count = 0; 
-        
         // cout << vs_sz << " <-- size check " << endl;
         
         for (int j = keyword_pos; j < vs_sz; j++) { // How many keyword in the line 
@@ -70,10 +68,7 @@ void AlphabetizerAndOutput::after_cshifting() {
             }
             else {
                 fout << " " ;
-              //  fout << " " << endl; // 추가
-
                 cout << " ";
-                //fout << " " << endl; // Test
             }
         }
         for (int j = 0; j < keyword_pos; j++) {
@@ -93,6 +88,27 @@ void AlphabetizerAndOutput::after_cshifting() {
     }
     fout.close();
 }
+
+
+bool alphabetizing(all_lines First, all_lines Second) {
+    int length = 0;
+    if((int)First.vs.size() < (int)Second.vs.size()) {
+        length = (int)First.vs.size();
+    }
+    else {
+        length = (int)Second.vs.size();
+    }
+    // Switch Postions again and again.. 
+    for (int i = 0; i < length; i++)
+    {
+        if (First.vs[i] != Second.vs[i])
+        {
+            return First.vs[i] < Second.vs[i];
+        }
+    }
+    return First.vs.size() < Second.vs.size();
+}
+
 
 // This function is to use at third parameter at sort in main function 
 // sort(first, second , cShiftFilter function) 
@@ -121,25 +137,7 @@ bool cShiftFilter(const keywords &a, const keywords &b)  {
         Second.vs.push_back(vectorLine[b.line_pos].vs[i]);
     }
 
-    if((int)First.vs.size() < (int)Second.vs.size()) {
-        length = (int)First.vs.size();
-        // cout << length << " First Value ? " << endl;
-    }
-    else {
-        length = (int)Second.vs.size();
-        // cout << length << " Second ? " << endl;
-    }
-
-    // Switch Postions again and again.. 
-    for (int i = 0; i < length; i++)
-    {
-        if (First.vs[i] != Second.vs[i])
-        {
-            return First.vs[i] < Second.vs[i];
-        }
-    }
-
-    return First.vs.size() < Second.vs.size();
+    return alphabetizing(First, Second);
 }
 
 int main() {
@@ -147,7 +145,7 @@ int main() {
     string inputKeyword;
     //compare sorter;
     Filters Filter;
-    AlphabetizerAndOutput AlphabetandOutput;
+    OutputResult AlphabetandOutput;
     
     Filter.readWordsFilter();
     //Filter.InputFilter(inputKeyword); // Input 한 줄씩 넣을 때..
@@ -156,7 +154,7 @@ int main() {
     
     cout << '\n' << "Sorted all_liness below " << '\n' << endl; 
    
-    AlphabetandOutput.after_cshifting();
+    AlphabetandOutput.output();
 
     return 0;
 }

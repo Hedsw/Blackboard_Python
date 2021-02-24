@@ -5,6 +5,10 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include <map>
+#include <list>
+#include <fstream>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -21,9 +25,13 @@ static vector<all_lines> vectorLine;
 static vector<keywords> vectorKeyword;
 
 bool Filter_cshift(const keywords &a, const keywords &b);
-class InputFilter{ 
+bool alphabetizing(all_lines First, all_lines Second);
+
+class InputFilter { 
     public: 
     void inputfunction(string inputKeyword);
+    void readWordsFilter();
+
 };
 
 class Shift_Alphabet{

@@ -8,6 +8,26 @@ The first implementation
 • displays the results on the screen. */
 #include "assignment1.h"
 
+
+void InputFilter::readWordsFilter() {
+    ifstream in ("keywordline.txt");
+    string readword;
+    if (!in) {
+        cout << " Nothing Happening";
+    return;
+    }
+    while(getline(in,readword)) {
+        line.vs.push_back(readword); 
+            vectorLine.push_back(line);
+    }
+    for (int i = 0; i < vectorLine.size(); i++) {
+        for(int j = 0; j < vectorLine[i].vs.size(); j++) {
+            keywords mywords = {i, j};
+            vectorKeyword.push_back(mywords);
+        }
+    }
+}
+
 void InputFilter::inputfunction(string inputKeyword) { 
     while (cin >> inputKeyword)
     {
@@ -71,13 +91,34 @@ void Shift_Alphabet::aftercircularshifting() {
     }
 }
 
+
+bool alphabetizing(all_lines First, all_lines Second) {
+    int length = 0;
+    if((int)First.vs.size() < (int)Second.vs.size()) {
+        length = (int)First.vs.size();
+    }
+    else {
+        length = (int)Second.vs.size();
+    }
+    // Switch Postions again and again.. 
+    for (int i = 0; i < length; i++)
+    {
+        if (First.vs[i] != Second.vs[i])
+        {
+            return First.vs[i] < Second.vs[i];
+        }
+    }
+    return First.vs.size() < Second.vs.size();
+}
+
 // This function is to use at third parameter at sort in main function 
 // sort(first, second , circularshift function) 
+// Also Do Alphabetizing
 // We are going to sort using this parameter
 bool Filter_cshift(const keywords &a, const keywords &b)  {
     all_lines First, Second;
     int length = 0;
-
+    //Shifting
     for (int i = a.keyword_pos; i < vectorLine[a.line_pos].vs.size(); i++)
     {
         First.vs.push_back(vectorLine[a.line_pos].vs[i]);
@@ -96,22 +137,10 @@ bool Filter_cshift(const keywords &a, const keywords &b)  {
         Second.vs.push_back(vectorLine[b.line_pos].vs[i]);
     }
 
-    if((int)First.vs.size() < (int)Second.vs.size()) {
-        length = (int)First.vs.size();
-    }
-    else {
-        length = (int)Second.vs.size();
-    }
-    // Switch Postions again and again.. 
-    for (int i = 0; i < length; i++)
-    {
-        if (First.vs[i] != Second.vs[i])
-        {
-            return First.vs[i] < Second.vs[i];
-        }
-    }
-    return First.vs.size() < Second.vs.size();
+    // Alphabetizing 
+    return alphabetizing(First, Second);
 }
+
 
 int main()
 {
