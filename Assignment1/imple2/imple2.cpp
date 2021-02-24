@@ -10,7 +10,7 @@ preposition (such as “in”, “on”, etc.), the line is not considered to be
 #include "imple2.h"
 // list<string> readwordlist;
 
-void KnowledgeSource::readWords() {
+void Filters::readWordsFilter() {
     ifstream in ("keywordline.txt");
     string readword;
     if (!in) {
@@ -19,9 +19,7 @@ void KnowledgeSource::readWords() {
     }
     while(getline(in,readword)) {
         line.vs.push_back(readword); 
-        //if(getchar() == '\n') {
             vectorLine.push_back(line);
-            //line.vs.clear();
     }
     for (int i = 0; i < vectorLine.size(); i++) {
         for(int j = 0; j < vectorLine[i].vs.size(); j++) {
@@ -32,12 +30,11 @@ void KnowledgeSource::readWords() {
 }
 
 
-void KnowledgeSource::inputfunction(string inputKeyword) { 
+void Filters::InputFilter(string inputKeyword) { 
     while (cin >> inputKeyword) {
         line.vs.push_back(inputKeyword); // Add all keyword into L struct line by line
         if (getchar() == '\n') {
             vectorLine.push_back(line); // In Empty space, input all lines into vectorLine
-            //cout << "Next lines will be sorted separately with previous contents " << endl;
 
             line.vs.clear();  // When Enterkey is twiced ,Clear all of information in L.vs
         }
@@ -52,7 +49,7 @@ void KnowledgeSource::inputfunction(string inputKeyword) {
     }
 }
 
-void Blackboard::aftercircularshifting() {
+void AlphabetizerAndOutput::after_cshifting() {
     ofstream fout;
     fout.open("result.txt");
     for (int i = 0; i < vectorKeyword.size(); i++) { // How many lines ..
@@ -68,12 +65,15 @@ void Blackboard::aftercircularshifting() {
             fout << vectorLine[line_pos].vs[j] ;
             cout << vectorLine[line_pos].vs[j] ;
             if(count == vs_sz) {   
-                fout << "" << endl;
+                fout << "" <<endl;
                 cout << "" << endl;
             }
             else {
-                fout << " ";
+                fout << " " ;
+              //  fout << " " << endl; // 추가
+
                 cout << " ";
+                //fout << " " << endl; // Test
             }
         }
         for (int j = 0; j < keyword_pos; j++) {
@@ -82,11 +82,11 @@ void Blackboard::aftercircularshifting() {
             cout << vectorLine[line_pos].vs[j];
 
             if(count == vs_sz) {
-                fout << "" << endl;
+                fout << ""  << endl;
                 cout << "" << endl;
             }
             else {   
-                fout << " ";
+                fout << " " ;
                 cout << " ";
             }
         }
@@ -95,9 +95,9 @@ void Blackboard::aftercircularshifting() {
 }
 
 // This function is to use at third parameter at sort in main function 
-// sort(first, second , circularshift function) 
+// sort(first, second , cShiftFilter function) 
 // We are going to sort using this parameter
-bool circularshift(const keywords &a, const keywords &b)  {
+bool cShiftFilter(const keywords &a, const keywords &b)  {
     all_lines First, Second;
     int length = 0;
 
@@ -146,26 +146,17 @@ int main() {
     cout << " Please type lines again, If you are done, type CTRL + D " << endl;
     string inputKeyword;
     //compare sorter;
-    KnowledgeSource KS;
-    Blackboard BB;
+    Filters Filter;
+    AlphabetizerAndOutput AlphabetandOutput;
     
-    KS.readWords();
-    //KS.inputfunction(inputKeyword); // Input 한 줄씩 넣을 때..
+    Filter.readWordsFilter();
+    //Filter.InputFilter(inputKeyword); // Input 한 줄씩 넣을 때..
 
-    sort(vectorKeyword.begin(), vectorKeyword.end(), circularshift);
+    sort(vectorKeyword.begin(), vectorKeyword.end(), cShiftFilter);
     
-    // store Keywords into lists from the files
-    
-    // Print the Keywords
-    /*
-    for(list<string>::iterator keyword = readwordlist.begin(); keyword!=readwordlist.end(); ++keyword)
-        cout << *keyword <<  " ";
-    cout << endl << endl;
-     */
-
     cout << '\n' << "Sorted all_liness below " << '\n' << endl; 
    
-    BB.aftercircularshifting();
+    AlphabetandOutput.after_cshifting();
 
     return 0;
 }

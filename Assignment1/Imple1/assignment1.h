@@ -20,13 +20,13 @@ struct all_lines {
 static vector<all_lines> vectorLine;
 static vector<keywords> vectorKeyword;
 
-bool circularshift(const keywords &a, const keywords &b);
-class KnowledgeSource{ 
+bool Filter_cshift(const keywords &a, const keywords &b);
+class InputFilter{ 
     public: 
     void inputfunction(string inputKeyword);
 };
 
-class Blackboard{
+class Shift_Alphabet{
     public:
     void aftercircularshifting();
 

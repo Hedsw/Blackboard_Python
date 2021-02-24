@@ -24,17 +24,17 @@ vector<string> readwordlist;
 static vector<all_lines> vectorLine;
 static vector<keywords> vectorKeyword;
 
-bool circularshift(const keywords &a, const keywords &b);
-class KnowledgeSource { 
+bool cShiftFilter(const keywords &a, const keywords &b);
+class Filters { 
     public: 
-        void inputfunction(string inputKeyword);
-        void readWords();
+        void InputFilter(string inputKeyword);
+        void readWordsFilter();
 
 };
 
-class Blackboard {
+class AlphabetizerAndOutput {
     public:
-        void aftercircularshifting();
+        void after_cshifting();
 
 };
 

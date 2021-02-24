@@ -8,7 +8,7 @@ The first implementation
 • displays the results on the screen. */
 #include "assignment1.h"
 
-void KnowledgeSource::inputfunction(string inputKeyword) { 
+void InputFilter::inputfunction(string inputKeyword) { 
     while (cin >> inputKeyword)
     {
         line.vs.push_back(inputKeyword); // Add all keyword into L struct line by line
@@ -31,7 +31,7 @@ void KnowledgeSource::inputfunction(string inputKeyword) {
     }
 }
 
-void Blackboard::aftercircularshifting() {
+void Shift_Alphabet::aftercircularshifting() {
     for (int i = 0; i < vectorKeyword.size(); i++) // How many lines ..
     {
         int line_pos = vectorKeyword[i].line_pos;
@@ -74,19 +74,17 @@ void Blackboard::aftercircularshifting() {
 // This function is to use at third parameter at sort in main function 
 // sort(first, second , circularshift function) 
 // We are going to sort using this parameter
-bool circularshift(const keywords &a, const keywords &b)  {
+bool Filter_cshift(const keywords &a, const keywords &b)  {
     all_lines First, Second;
     int length = 0;
 
     for (int i = a.keyword_pos; i < vectorLine[a.line_pos].vs.size(); i++)
     {
         First.vs.push_back(vectorLine[a.line_pos].vs[i]);
-        //cout << vectorLine[a.line_pos].vs[i] << " What is it? " << endl;
     }
     for (int i = 0; i < a.keyword_pos; i++)
     {
         First.vs.push_back(vectorLine[a.line_pos].vs[i]);
-        //cout << vectorLine[a.line_pos].vs[i] << " number two " << endl;
     }
 
     for (int i = b.keyword_pos; i < vectorLine[b.line_pos].vs.size(); i++)
@@ -100,13 +98,10 @@ bool circularshift(const keywords &a, const keywords &b)  {
 
     if((int)First.vs.size() < (int)Second.vs.size()) {
         length = (int)First.vs.size();
-        // cout << length << " First Value ? " << endl;
     }
     else {
         length = (int)Second.vs.size();
-        // cout << length << " Second ? " << endl;
     }
-
     // Switch Postions again and again.. 
     for (int i = 0; i < length; i++)
     {
@@ -115,7 +110,6 @@ bool circularshift(const keywords &a, const keywords &b)  {
             return First.vs[i] < Second.vs[i];
         }
     }
-
     return First.vs.size() < Second.vs.size();
 }
 
@@ -124,14 +118,14 @@ int main()
     cout << " Please type lines again, If you are done, type CTRL + D " << endl;
     string inputKeyword;
     //compare sorter;
-    KnowledgeSource KS;
-    Blackboard BB;
-
+    InputFilter KS;
+    Shift_Alphabet BB;
+    //Input Filter 
     KS.inputfunction(inputKeyword);
-
-    // cout << vw.size() << " <-- size check " << endl;
-    sort(vectorKeyword.begin(), vectorKeyword.end(), circularshift);
+    // Circular Shift Filter 
+    sort(vectorKeyword.begin(), vectorKeyword.end(), Filter_cshift);
     cout << '\n' << "Sorted all_liness below " << '\n' << endl; 
+    //Alphabetizer and Output Filter 
     BB.aftercircularshifting();
 
     return 0;
